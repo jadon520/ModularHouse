@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular House Configuration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e40af, #3730a3);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .initial-questions {
+            padding: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .question-group {
+            margin-bottom: 24px;
+        }
+        
+        .question-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1e293b;
+            font-size: 1.05rem;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .option-btn {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .option-btn:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .option-btn.selected {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .configuration-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        .configuration-table th {
+            background-color: #1e40af;
+            color: white;
+            font-weight: 600;
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 2px solid #3730a3;
+        }
+        
+        .configuration-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        
+        .configuration-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .configuration-table tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .config-category {
+            font-weight: 600;
+            color: #1e293b;
+            width: 35%;
+        }
+        
+        .customer-selection {
+            width: 65%;
+        }
+        
+        .color-sample {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .customer-info {
+            padding: 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 0.95rem;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #ef4444;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        textarea.text-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .help-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        
+        .action-buttons {
+            padding: 20px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #128C7E;
+        }
+        
+        .summary-section {
+            padding: 24px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin: 20px;
+            display: none;
+        }
+        
+        .summary-section.active {
+            display: block;
+        }
+        
+        .summary-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1e293b;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .summary-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+        
+        .instructions {
+            background: #eff6ff;
+            padding: 16px 20px;
+            border-left: 4px solid #3b82f6;
+            margin: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .instructions p {
+            color: #475569;
+        }
+        
+        .manager-info {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+            border: 1px solid #bae6fd;
+        }
+        
+        .manager-info h3 {
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .manager-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .manager-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .manager-contact {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .contact-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background: #128C7E;
+        }
+        
+        @media (max-width: 768px) {
+            .configuration-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .options-container {
+                flex-direction: column;
+            }
+            
+            .option-btn {
+                flex: none;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .manager-details {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .configuration-table th, 
+            .configuration-table td {
+                padding: 12px 15px;
+            }
+            
+            .initial-questions {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Modular House Configuration</h1>
+            <p class="subtitle">Customize your modular home by selecting from the options below. All fields marked with * are required.</p>
+        </header>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Configuration Instructions</h3>
+            <p>Please select one option for each configuration category. Click on your preferred choice to select it. If you need a custom option not listed, please contact our sales team directly.</p>
+        </div>
+        
+        <div class="initial-questions">
+            <div class="question-group">
+                <label class="question-label">1. Have you imported products from China or other countries before?</label>
+                <div class="options-container">
+                    <div class="option-btn" data-value="Yes">Yes</div>
+                    <div class="option-btn" data-value="No">No</div>
+                </div>
+            </div>
+            
+            <div class="question-group">
+                <label class="question-label">2. Do you have a forwarder in China?</label>
+                <div class="options-container">
+                    <div class="option-btn" data-value="Yes">Yes</div>
+                    <div class="option-btn" data-value="No">No</div>
+                </div>
+            </div>
+        </div>
+        
+        <table class="configuration-table">
+            <thead>
+                <tr>
+                    <th>Configuration Category</th>
+                    <th>Customer Selection</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="config-category">House Size (Transport Dimensions)</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="10ft">10ft</div>
+                            <div class="option-btn" data-value="20ft">20ft</div>
+                            <div class="option-btn" data-value="40ft">40ft</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Frame Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Black"><span class="color-sample" style="background: #000000;"></span> Black</div>
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gray"><span class="color-sample" style="background: #808080;"></span> Gray</div>
+                            <div class="option-btn" data-value="Wood Grain">Wood Grain</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">External Wall Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Foam Panel">Foam Panel</div>
+                            <div class="option-btn" data-value="Polyurethane Panel">Polyurethane Panel</div>
+                            <div class="option-btn" data-value="Metal Carved Panel">Metal Carved Panel</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">External Wall Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Black"><span class="color-sample" style="background: #000000;"></span> Black</div>
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gray"><span class="color-sample" style="background: #808080;"></span> Gray</div>
+                            <div class="option-btn" data-value="Wood Grain">Wood Grain</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Internal Wall Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Metal Panel">Metal Panel</div>
+                            <div class="option-btn" data-value="Bamboo Fiber Board">Bamboo Fiber Board</div>
+                            <div class="option-btn" data-value="Carbon Crystal Panel">Carbon Crystal Panel</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Internal Wall Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Wood Grain">Wood Grain</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Electrical Standard</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="US Standard">US Standard</div>
+                            <div class="option-btn" data-value="EU Standard">EU Standard</div>
+                            <div class="option-btn" data-value="AU Standard">AU Standard</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Floor Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="PVC Plastic Floor">PVC Plastic Floor</div>
+                            <div class="option-btn" data-value="PVC Stone Plastic Floor">PVC Stone Plastic Floor</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">PVC Baseboard Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Black"><span class="color-sample" style="background: #000000;"></span> Black</div>
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gold"><span class="color-sample" style="background: #FFD700;"></span> Gold</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Kitchen Cabinet Style</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Straight Type">Straight Type</div>
+                            <div class="option-btn" data-value="L Shape">L Shape</div>
+                            <div class="option-btn" data-value="U Shape">U Shape</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Kitchen Cabinet Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Stainless Steel">Stainless Steel</div>
+                            <div class="option-btn" data-value="Paint Finish Board">Paint Finish Board</div>
+                            <div class="option-btn" data-value="Solid Wood Veneer">Solid Wood Veneer</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Entrance Door Type</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Steel Door">Steel Door</div>
+                            <div class="option-btn" data-value="KFC Door">KFC Door</div>
+                            <div class="option-btn" data-value="Sliding Door">Sliding Door</div>
+                            <div class="option-btn" data-value="Aluminum Door">Aluminum Door</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Entrance Door Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Black"><span class="color-sample" style="background: #000000;"></span> Black</div>
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gray"><span class="color-sample" style="background: #808080;"></span> Gray</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Internal Door Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Steel">Steel</div>
+                            <div class="option-btn" data-value="Wood">Wood</div>
+                            <div class="option-btn" data-value="Aluminum">Aluminum</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Internal Door Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gray"><span class="color-sample" style="background: #808080;"></span> Gray</div>
+                            <div class="option-btn" data-value="Wood Grain">Wood Grain</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Window Material</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="PVC Window">PVC Window</div>
+                            <div class="option-btn" data-value="Thermal Break Aluminum Window">Thermal Break Aluminum Window</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="config-category">Window Color</td>
+                    <td class="customer-selection">
+                        <div class="options-container">
+                            <div class="option-btn" data-value="Black"><span class="color-sample" style="background: #000000;"></span> Black</div>
+                            <div class="option-btn" data-value="White"><span class="color-sample" style="background: #ffffff;"></span> White</div>
+                            <div class="option-btn" data-value="Gray"><span class="color-sample" style="background: #808080;"></span> Gray</div>
+                            <div class="option-btn" data-value="Champagne Gold"><span class="color-sample" style="background: #F7E7CE;"></span> Champagne Gold</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="customer-info">
+            <h3 style="color: #1e293b; margin-bottom: 20px; text-align: center;">Your Information</h3>
+            <p style="color: #64748b; text-align: center; margin-bottom: 20px;">Please provide your contact details so we can send you a customized quote.</p>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <label class="form-label required">Your Name</label>
+                    <input type="text" class="text-input" id="customer-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-col">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" class="text-input" id="email" placeholder="your.email@example.com">
+                    <div class="help-text">We'll send your quote to this email address</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-col">
+                    <label class="form-label required">Phone Number</label>
+                    <input type="tel" class="text-input" id="phone" placeholder="(123) 456-7890">
+                </div>
+                <div class="form-col">
+                    <label class="form-label">Project Location (State)</label>
+                    <input type="text" class="text-input" id="location" placeholder="e.g. California, Texas, Florida">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Special Requirements</label>
+                <textarea class="text-input" id="special-requirements" placeholder="Any special requirements, questions, or timeline for your project"></textarea>
+                <div class="help-text">Please provide any additional details that might help us better understand your needs</div>
+            </div>
+        </div>
+        
+        <div class="manager-info">
+            <h3><i class="fas fa-user-tie"></i> Your Business Manager</h3>
+            <div class="manager-details">
+                <div class="manager-detail">
+                    <span class="detail-label">Name</span>
+                    <span class="detail-value">Jadon</span>
+                </div>
+                <div class="manager-detail">
+                    <span class="detail-label">WhatsApp</span>
+                    <span class="detail-value">+86 18056088886</span>
+                </div>
+            </div>
+            <div class="manager-contact">
+                <a href="https://wa.me/8618056088886" class="contact-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Contact on WhatsApp
+                </a>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="generate-summary">
+                <i class="fas fa-file-alt"></i> Generate Configuration Summary
+            </button>
+            <a class="btn btn-whatsapp" id="whatsapp-btn" style="display: none;">
+                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+            </a>
+        </div>
+        
+        <div class="summary-section" id="summary-section">
+            <div class="summary-title">Your Configuration Summary</div>
+            <div class="summary-content" id="summary-content">
+                <!-- Summary content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Option selection functionality for initial questions
+        document.querySelectorAll('.initial-questions .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove selected class from siblings (same question)
+                const questionGroup = this.closest('.question-group');
+                const siblings = questionGroup.querySelectorAll('.option-btn');
+                siblings.forEach(sibling => sibling.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+        
+        // Option selection functionality for configuration table
+        document.querySelectorAll('.configuration-table .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove selected class from siblings (same row)
+                const row = this.closest('tr');
+                const siblings = row.querySelectorAll('.option-btn');
+                siblings.forEach(sibling => sibling.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+        
+        // Generate summary functionality
+        document.getElementById('generate-summary').addEventListener('click', function() {
+            // Validate required fields
+            const customerName = document.getElementById('customer-name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!customerName || !email || !phone) {
+                alert('Please fill in all required fields (name, email, and phone) before generating the summary.');
+                return;
+            }
+            
+            // Check if initial questions are answered
+            const initialQuestions = document.querySelectorAll('.initial-questions .question-group');
+            let allInitialQuestionsAnswered = true;
+            
+            initialQuestions.forEach(question => {
+                const selectedOptions = question.querySelectorAll('.option-btn.selected');
+                if (selectedOptions.length === 0) {
+                    allInitialQuestionsAnswered = false;
+                    const questionText = question.querySelector('.question-label').textContent;
+                    alert(`Please answer: ${questionText}`);
+                    question.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    throw new Error('Missing answer'); // Break out of forEach
+                }
+            });
+            
+            // Check if at least one option is selected in each category
+            let allCategoriesSelected = true;
+            const rows = document.querySelectorAll('.configuration-table tbody tr');
+            
+            rows.forEach(row => {
+                const selectedOptions = row.querySelectorAll('.option-btn.selected');
+                if (selectedOptions.length === 0) {
+                    allCategoriesSelected = false;
+                    const categoryName = row.querySelector('.config-category').textContent;
+                    alert(`Please select an option for: ${categoryName}`);
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    throw new Error('Missing selection'); // Break out of forEach
+                }
+            });
+            
+            // Collect initial question answers
+            const initialAnswers = {};
+            document.querySelectorAll('.initial-questions .question-group').forEach(question => {
+                const questionText = question.querySelector('.question-label').textContent;
+                const answer = question.querySelector('.option-btn.selected').getAttribute('data-value');
+                initialAnswers[questionText] = answer;
+            });
+            
+            // Collect selected options
+            const selectedOptions = {};
+            
+            document.querySelectorAll('.configuration-table tbody tr').forEach(row => {
+                const category = row.querySelector('.config-category').textContent;
+                const selectedOption = row.querySelector('.option-btn.selected').getAttribute('data-value');
+                selectedOptions[category] = selectedOption;
+            });
+            
+            // Get customer info
+            const location = document.getElementById('location').value || 'Not specified';
+            const specialReqs = document.getElementById('special-requirements').value || 'None';
+            
+            // Build summary text
+            let summaryText = `MODULAR HOUSE CONFIGURATION REQUEST\n\n`;
+            summaryText += `CUSTOMER INFORMATION:\n`;
+            summaryText += `=====================\n`;
+            summaryText += `Name: ${customerName}\n`;
+            summaryText += `Email: ${email}\n`;
+            summaryText += `Phone: ${phone}\n`;
+            summaryText += `Location: ${location}\n\n`;
+            
+            summaryText += `IMPORT EXPERIENCE:\n`;
+            summaryText += `==================\n`;
+            for (const [question, answer] of Object.entries(initialAnswers)) {
+                summaryText += `${question}: ${answer}\n`;
+            }
+            summaryText += `\n`;
+            
+            summaryText += `CONFIGURATION SELECTIONS:\n`;
+            summaryText += `=========================\n\n`;
+            
+            for (const [category, option] of Object.entries(selectedOptions)) {
+                summaryText += `${category}: ${option}\n`;
+            }
+            
+            summaryText += `\nSPECIAL REQUIREMENTS:\n`;
+            summaryText += `=====================\n`;
+            summaryText += `${specialReqs}\n\n`;
+            
+            summaryText += `Please provide a quotation based on the above configuration.`;
+            
+            // Display summary
+            document.getElementById('summary-content').textContent = summaryText;
+            document.getElementById('summary-section').classList.add('active');
+            
+            // Set up WhatsApp button
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            const encodedText = encodeURIComponent(summaryText);
+            whatsappBtn.href = `https://wa.me/?text=${encodedText}`;
+            whatsappBtn.style.display = 'flex';
+            
+            // Scroll to summary
+            document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
